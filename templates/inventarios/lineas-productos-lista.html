@@ -1,0 +1,98 @@
+{% extends 'plantilla_base.html' %}
+
+{% block titulo %}
+    Líneas de Productos
+{% endblock titulo %}
+
+{% block js %}
+    <script>
+        function eliminar(cod_linea) {
+          Swal.fire({
+            'title': 'Desea Confirmar Eliminación ?',
+            'text': 'Línea de Producto No Podrá ser Recuperada !!!',
+            'icon': 'question',
+            'showCancelButton': true,
+            'confirmButtonText': 'Si, Eliminar',
+            'cancelButtonText': 'No, Cancelar',
+            'reverseButtons': true,
+            'cancelButtonColor': '#7C9E41',
+            'confirmButtonColor': '#dc3545'
+            })
+            .then(function(result) {
+                if(result.isConfirmed) {
+                    window.location.href = 'http://' + window.location.host + "/inventarios/lineas-productos-eliminar/" + cod_linea
+                }
+            })
+        }
+    </script>
+{% endblock js %}
+
+{% block contenido %}
+
+    <!-- Esto se hace con bs5-card-head-foot -->
+    <div class="card">
+        <div class="card-header">
+            <div class="btn-toolbar container-fluid">
+    
+                {% if perms.inventarios.add_inv_lineas_productos %}
+                    <!-- Esto se hace con bs5-button-a -->
+                    <a name="" id="" class="btn btn-success me-2" href="{% url 'lineas-crear' %}" role="button">Agregar Nueva Línea</a>
+                {% endif %}
+                <form class="d-flex">
+                    <input class="form-control me-2 col-lg-4" type="search" placeholder="Buscar" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </form>
+            </div>
+        </div>
+        <div class="card-body">
+            <h4 class="card-title text-center">Lista de Líneas de Productos</h4>
+
+            <!-- Esto se hace utilizando bs5-table -->
+            <div class="table-responsive">
+                <table class="table table-primary table-striped"">
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col">Código de Línea</th>
+                            <th scope="col">Descripción de la Línea de Producto</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for linea in entity %}
+                            <tr class="">
+                                <td class="text-center" scope="row">{{ linea.cod_linea }}</td>
+                                <td>{{ linea.nbr_linea | title }}</td>
+                                <td class="text-center">
+                                    {% if perms.inventarios.change_inv_lineas_productos %}
+                                        <a class="btn btn-sm btn-info" href="{% url 'lineas-modificar' linea.cod_linea %}" role="button">
+                                            <i class="fa-solid fa-pencil" ></i> 
+                                        </a>
+                                    {% endif %}
+                                    |
+                                    {% if perms.inventarios.delete_inv_lineas_productos %}
+                                        <a class="btn btn-sm btn-danger" href="#" onclick="eliminar('{{ linea.cod_linea }}')" role="button">
+                                            <i class="fa-solid fa-trash-can" ></i> 
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+    
+                    </tbody>
+                </table>
+
+                <hr>
+                <div>
+                    {% include 'paginator.html' %}
+                </div>
+
+            </div>
+            
+        </div>
+        <div class="card-footer text-muted text-center">
+            <!-- Todos los Derechos Reservados - GammaSoft -->
+        </div>
+    </div>
+
+{% endblock %}

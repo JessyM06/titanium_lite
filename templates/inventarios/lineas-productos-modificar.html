@@ -1,0 +1,47 @@
+{% extends 'plantilla_base.html' %}
+
+{% block titulo %} 
+    Modificar Linea de Productos 
+{% endblock titulo %} 
+
+{% block contenido %}
+
+    {% load crispy_forms_tags %}
+
+    <form enctype = "multipart/form-data" method = "post">
+
+        <div class="col-12 col-md-6 offset-md-3">
+
+            <!-- Se le indica a Django con esta llave que este formulario le pertenece a la misma aplicacion -->
+            {% csrf_token %}
+
+            <!-- bs5-card-head-foot -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title text-center">Modificación de Líneas de Producto</h4>
+                </div>
+
+                <div class="text-center">
+                    <br>
+                    <!-- bs5-button-input -->
+                    <input name="" id="" class="btn btn-success" type="submit" value="Enviar Información">
+
+                    <input name="" id="" class="btn btn-secondary" type="reset" value="Limpiar">
+
+                    <a name="" id="" class="btn btn-danger" href="{{ request.META.HTTP_REFERER }}" role="button">Cancelar</a>
+                    <hr>
+                </div>
+
+                <div class="card-body">
+
+                    {{ formulario | crispy }}
+
+                </div>
+                <div class="card-footer text-muted">
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock contenido %}

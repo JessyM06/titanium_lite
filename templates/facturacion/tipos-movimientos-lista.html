@@ -1,0 +1,101 @@
+{% extends 'plantilla_base.html' %}
+
+{% block titulo %}
+    Tipos de Movimientos
+{% endblock %}
+
+{% block js %}
+    <script>
+        function eliminar(cod_movimiento) {
+          Swal.fire({
+            'title': 'Desea Confirmar Eliminación ?',
+            'text': 'Tipo de Movimiento No Podrá ser Recuperado !!!',
+            'icon': 'question',
+            'showCancelButton': true,
+            'confirmButtonText': 'Si, Eliminar',
+            'cancelButtonText': 'No, Cancelar',
+            'reverseButtons': true,
+            'cancelButtonColor': '#7C9E41',
+            'confirmButtonColor': '#dc3545'
+            })
+            .then(function(result) {
+                if(result.isConfirmed) {
+                    window.location.href = 'http://' + window.location.host + "/facturacion/tipos-movimientos-eliminar/" + cod_movimiento
+                }
+            })
+        }
+    </script>
+{% endblock js %}
+
+{% block contenido %}
+
+    <!-- Esto se hace con bs5-card-head-foot -->
+    <div class="card">
+        <div class="card-header">
+            <div class="btn-toolbar container-fluid">
+
+                {% if perms.facturacion.add_fac_tipos_movimientos %}
+                    <!-- Esto se hace con bs5-button-a -->
+                    <a name="" id="" class="btn btn-success me-2" href="{% url 'tipos-mov-crear' %}" role="button">Agregar Tipo de Movimiento</a>
+                {% endif %}   
+                <form class="d-flex">
+                    <input class="form-control me-2 col-lg-4" type="search" placeholder="Buscar" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </form>
+            </div>
+        </div>
+        <div class="card-body">
+            <h4 class="card-title text-center">Lista de Tipos de Movimientos</h4>
+
+            <!-- Esto se hace utilizando bs5-table -->
+            <div class="table-responsive">
+                <table class="table table-primary table-striped"">
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col">Código Movimiento</th>
+                            <th scope="col">Descripción del Tipo de Movimiento</th>
+                            <th scope="col">Serie del Documento</th>
+                            <th scope="col">Correlativo Actual</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for tipomov in entity %}
+                            <tr class="">
+                                <td class="text-center" scope="row">{{ tipomov.cod_movimiento }}</td>
+                                <td>{{ tipomov.nbr_movimiento }}</td>
+                                <td>{{ tipomov.str_serie_doc }}</td>
+                                <td>{{ tipomov.num_correlativo_actual }}</td>
+                                <td class="text-center">
+                                    {% if perms.facturacion.change_fac_tipos_movimientos %}
+                                        <a class="btn btn-sm btn-info" href="{% url 'tipos-mov-modificar' tipomov.cod_movimiento %}" role="button">
+                                            <i class="fa-solid fa-pencil" ></i> 
+                                        </a>
+                                    {% endif %}   
+                                    |
+                                    {% if perms.facturacion.delete_fac_tipos_movimientos %}
+                                        <a class="btn btn-sm btn-danger" href="#" onclick="eliminar('{{ tipomov.cod_movimiento }}')" role="button">
+                                            <i class="fa-solid fa-trash-can" ></i> 
+                                        </a>
+                                    {% endif %}   
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+
+                <hr>
+                <div>
+                    {% include 'paginator.html' %}
+                </div>
+
+            </div>
+        </div>
+        <div class="card-footer text-muted text-center">
+            <!-- Todos los Derechos Reservados - GammaSoft -->
+        </div>
+    </div>
+
+{% endblock %}

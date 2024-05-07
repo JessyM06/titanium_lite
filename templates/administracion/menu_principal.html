@@ -1,0 +1,226 @@
+{% load static %}
+
+<!doctype html>
+<html lang="es">
+
+<head>
+  <title>Titanium</title>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS v5.2.1 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">  
+
+  <link rel="stylesheet" type="text/css" href="{% static '/estilos/estilos.css' %}">
+
+</head>
+
+<body>
+  <header>
+
+    <!-- Construcción de nuestro NavBar -->
+    <div class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid container">
+
+        <a class="navbar-brand" href="#">
+          <img src="static/imagenes/GS-Logo.ico" alt="" width="35" height="35">
+        </a>
+        <a href="#" class="navbar-brand">GammaSoft</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a href="#" class="nav-link">Administración</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Inventarios</a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li>
+                  <a href="#" class="dropdown-item">Configuración &raquo;</a>
+                  <ul class="dropdown-menu submenu dropdown-menu-dark">
+                    {% if perms.inventarios.view_inv_lineas_productos %}
+                      <li>
+                        <a href="{% url 'lineas-lista' %}" class="dropdown-item">Líneas de Productos</a>
+                      </li>
+                    {% endif %}
+                    {% if perms.inventarios.view_inv_unidades_medida %}
+                      <li>
+                        <a href="{% url 'unidades-lista' %}" class="dropdown-item">Unidades de Medida</a>
+                      </li>
+                    {% endif %}
+                    {% if perms.inventarios.view_inv_catalogo_productos %}
+                      <li>
+                        <a href="{% url 'productos-lista' %}" class="dropdown-item">Catálogo de Productos</a>
+                      </li>
+                    {% endif %}
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" class="dropdown-item">Procesos &raquo;</a>
+                  <ul class="dropdown-menu submenu dropdown-menu-dark">
+                    <li>
+                      <a href="#" class="dropdown-item">Movimientos de Inventarios</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" class="dropdown-item">Reportes &raquo;</a>
+                  <ul class="dropdown-menu submenu dropdown-menu-dark">
+                    <li>
+                      <a href="#" class="dropdown-item">Existencias de Productos</a>
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item">Kardex General</a>
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item">Movimientos por Productos</a>
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item">Productos sin Movimientos</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Facturación</a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li>
+                  <a href="#" class="dropdown-item">Configuración &raquo;</a>
+                  <ul class="dropdown-menu submenu dropdown-menu-dark">
+                    {% if perms.facturacion.view_fac_tipos_movimientos %}
+                      <li>
+                        <a href="{% url 'tipos-mov-lista' %}" class="dropdown-item">Tipos de Movimientos</a>
+                      </li>
+                    {% endif %}
+                    <li>
+                      <a href="#" class="dropdown-item">Clientes</a>
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item">Vendedores</a>
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item">Tipos de Impuestos</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" class="dropdown-item">Procesos &raquo;</a>
+                  <ul class="dropdown-menu submenu dropdown-menu-dark">
+                    <li>
+                      <a href="#" class="dropdown-item">Facturas / Créditos Fiscales</a>
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item">Tickets</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" class="dropdown-item">Reportes &raquo;</a>
+                  <ul class="dropdown-menu submenu dropdown-menu-dark">
+                    <li>
+                      <a href="#" class="dropdown-item">Detalle de Ventas por Productos</a>
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item">Detalle de Cierre de Caja</a>
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item">Resumen de Ingresos Diarios</a>
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item">Productos más Vendidos</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a href="{% url 'contacto' %}" class="nav-link">Contactanos</a>
+            </li>
+            
+            {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a href="{% url 'logout' %}" class="nav-link">Cerrar Sesión</a>
+              </li>
+              <li>
+                <a href="#"  class="nav-link">@{{ user.username }}</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a href="{% url 'registro' %}" class="nav-link">Registrarse</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'login' %}" class="nav-link">Iniciar Sesión</a>
+              </li>
+            {% endif %}
+              
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container text-center col-lg-5 col-md-6 col-sm-6 col-xs-12">
+      <br><br><br>
+
+      <div class = "row">
+        <figure>
+          <img class="img-fluid rounded d-block m-l-none" alt="Slogan" src="{% static '/imagenes/LogoTitanium.jpg' %}">
+        </figure>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="container-fluid text-center mt-4">
+
+    <script type="text/javascript">
+      var fecha = new Date();
+      document.write('Todos los Derechos Reservados - GammaSoft ' + fecha.getFullYear());
+    </script>
+
+  </footer>
+
+  <!-- Bootstrap JavaScript Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+    integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+  </script>
+
+  {% if messages %}
+            
+    {% for texto in messages %}
+      <script>
+        Swal.fire({
+          'title': 'Titanium System',
+          'text': '{{ texto }}',
+          'icon': 'success'
+        })
+      </script>
+    {% endfor %}
+
+  {% endif %}
+
+</body>
+
+</html>

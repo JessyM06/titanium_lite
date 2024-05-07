@@ -1,0 +1,113 @@
+{% extends 'plantilla_base.html' %}
+{% load humanize %}
+
+{% block titulo %}
+    Catálogo de Productos
+{% endblock %}
+
+{% block js %}
+    <script>
+        function eliminar(cod_producto) {
+          Swal.fire({
+            'title': 'Desea Confirmar Eliminación ?',
+            'text': 'Producto No Podrá ser Recuperado !!!',
+            'icon': 'question',
+            'showCancelButton': true,
+            'confirmButtonText': 'Si, Eliminar',
+            'cancelButtonText': 'No, Cancelar',
+            'reverseButtons': true,
+            'cancelButtonColor': '#7C9E41',
+            'confirmButtonColor': '#dc3545'
+            })
+            .then(function(result) {
+                if(result.isConfirmed) {
+                    window.location.href = 'http://' + window.location.host + "/inventarios/catalogo-productos-eliminar/" + cod_producto
+                }
+            })
+        }
+    </script>
+{% endblock js %}
+
+{% block contenido %}
+
+    <!-- Esto se hace con bs5-card-head-foot -->
+    <div class="card">
+        <div class="card-header">
+            <div class="btn-toolbar container-fluid">
+
+                {% if perms.inventarios.add_inv_catalogo_productos %}
+                    <!-- Esto se hace con bs5-button-a -->
+                    <a name="" id="" class="btn btn-success me-2" href="{% url 'productos-crear' %}" role="button">Agregar Nuevo Producto</a>
+                {% endif %}
+                <form class="d-flex">
+                    <input class="form-control me-2 col-lg-4" type="search" placeholder="Buscar" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </form>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <h4 class="card-title text-center">Lista de Productos</h4>
+
+            <!-- Esto se hace utilizando bs5-table -->
+            <div class="table-responsive">
+                <table class="table table-sm table-success table-striped table-hover">
+
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col">Código de Producto</th>
+                            <th scope="col">Nombre del Producto</th>
+                            <th scope="col">Imagen</th>
+                            <th scope="col">Unidad</th>
+                            <th scope="col">Existencia</th>
+                            <th scope="col">Precio Venta</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for producto in entity %}
+                            <tr class="">
+                                <td class="text-center" scope="row">{{ producto.cod_producto }}</td>
+                                <td>{{ producto.nbr_producto | title }}</td>
+                                <td>
+                                    {% if producto.str_imagen %}
+                                        <img src="{{ producto.str_imagen.url }}" height="50" />
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">{{ producto.cod_unidad }}</td>
+                                <td class="text-right">{{ producto.num_existencia_actual }}</td>
+                                <td class="text-right">${{ producto.val_precio_venta | floatformat:2 }}</td>
+                                <td class="text-center">
+                                    {% if perms.inventarios.change_inv_catalogo_productos %}
+                                        <a class="btn btn-sm btn-info" href="{% url 'productos-modificar' producto.cod_producto %}" role="button">
+                                            <i class="fa-solid fa-pencil" ></i> 
+                                        </a>
+                                    {% endif %}
+                                    |
+                                    {% if perms.inventarios.delete_inv_catalogo_productos %}
+                                        <a class="btn btn-sm btn-danger" href="#" onclick="eliminar('{{ producto.cod_producto }}')" role="button">
+                                            <i class="fa-solid fa-trash-can" ></i> 
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+    
+                    </tbody>
+                </table>
+
+                <hr>
+                <div>
+                    {% include 'paginator.html' %}
+                </div>
+
+            </div>
+            
+        </div>
+        <div class="card-footer text-muted text-center">
+            <!-- Todos los Derechos Reservados - GammaSoft -->
+        </div>
+    </div>
+
+{% endblock %}

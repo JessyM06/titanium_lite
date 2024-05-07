@@ -1,0 +1,98 @@
+{% extends 'plantilla_base.html' %}
+
+{% block titulo %}
+    Líneas de Productos
+{% endblock %}
+
+{% block js %}
+    <script>
+        function eliminar(cod_unidad) {
+          Swal.fire({
+            'title': 'Desea Confirmar Eliminación ?',
+            'text': 'Unidad de Medida No Podrá ser Recuperada !!!',
+            'icon': 'question',
+            'showCancelButton': true,
+            'confirmButtonText': 'Si, Eliminar',
+            'cancelButtonText': 'No, Cancelar',
+            'reverseButtons': true,
+            'cancelButtonColor': '#7C9E41',
+            'confirmButtonColor': '#dc3545'
+            })
+            .then(function(result) {
+                if(result.isConfirmed) {
+                    window.location.href = 'http://' + window.location.host + "/inventarios/unidades-medida-eliminar/" + cod_unidad
+                }
+            })
+        }
+    </script>
+{% endblock js %}
+
+{% block contenido %}
+
+    <!-- Esto se hace con bs5-card-head-foot -->
+    <div class="card">
+        <div class="card-header">
+            <div class="btn-toolbar container-fluid">
+    
+                {% if perms.inventarios.add_inv_unidades_medida %}
+                    <!-- Esto se hace con bs5-button-a -->
+                    <a name="" id="" class="btn btn-success me-2" href="{% url 'unidades-crear' %}" role="button">Agregar Nueva Unidad</a>
+                {% endif %}
+                <form class="d-flex">
+                    <input class="form-control me-2 col-lg-4" type="search" placeholder="Buscar" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </form>
+            </div>
+        </div>
+        <div class="card-body">
+            <h4 class="card-title text-center">Lista de Unidades de Medida</h4>
+            
+            <!-- Esto se hace utilizando bs5-table -->
+            <div class="table-responsive">
+                <table class="table table-primary table-striped"">
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col">Código de Unidad</th>
+                            <th scope="col">Nombre de la Unidad de Medida</th>
+                            <th scope="col">Operaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for unidad in entity %}
+                            <tr class="">
+                                <td class="text-center" scope="row">{{ unidad.cod_unidad }}</td>
+                                <td>{{ unidad.nbr_unidad }}</td>
+                                <td class="text-center">
+                                    {% if perms.inventarios.change_inv_unidades_medida %}
+                                        <a class="btn btn-sm btn-info" href="{% url 'unidades-modificar' unidad.cod_unidad %}" role="button">
+                                            <i class="fa-solid fa-pencil" ></i> 
+                                        </a>
+                                    {% endif %}
+                                    |
+                                    {% if perms.inventarios.delete_inv_unidades_medida %}
+                                        <a class="btn btn-sm btn-danger" href="#" onclick="eliminar('{{ unidad.cod_unidad }}')" role="button">
+                                            <i class="fa-solid fa-trash-can" ></i> 
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+    
+                    </tbody>
+                </table>
+
+                <hr>
+                <div>
+                    {% include 'paginator.html' %}
+                </div>
+
+            </div>
+            
+        </div>
+        <div class="card-footer text-muted text-center">
+            <!-- Todos los Derechos Reservados - GammaSoft -->
+        </div>
+    </div>
+
+{% endblock %}
